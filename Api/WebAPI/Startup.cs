@@ -1,5 +1,6 @@
 using DataAccess;
 using DataAccess.Repo.UOW;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ namespace WebAPI
         {
 
             services.AddControllers();
+            services.AddMediatR(typeof(Startup));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddSwaggerGen(c =>
             {
