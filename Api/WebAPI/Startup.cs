@@ -1,4 +1,5 @@
 using DataAccess;
+using DataAccess.Repo.UOW;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace WebAPI
         {
 
             services.AddControllers();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
