@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\DataAccess\DataAccess.csproj" />
+    <ProjectReference Include="..\..\ApiCore\DataAccess\DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

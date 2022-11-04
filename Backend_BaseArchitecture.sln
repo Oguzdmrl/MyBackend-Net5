@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32929.386
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{8C75939E-3C4A-419E-BF4A-D84F55C45066}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiCore", "ApiCore", "{8C75939E-3C4A-419E-BF4A-D84F55C45066}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{8478EF9A-3677-4719-975D-1C7787E9B7AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Core\Entities\Entities.csproj", "{B6D11CA6-2154-46BA-856C-59500C4E9352}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "ApiCore\Entities\Entities.csproj", "{B6D11CA6-2154-46BA-856C-59500C4E9352}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "Core\DataAccess\DataAccess.csproj", "{AA1A2643-030D-4A16-AC57-219D877E7785}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "ApiCore\DataAccess\DataAccess.csproj", "{AA1A2643-030D-4A16-AC57-219D877E7785}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "Api\WebAPI\WebAPI.csproj", "{EF916BE5-EA55-4868-9C41-4B139001AF42}"
 EndProject
