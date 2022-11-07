@@ -19,10 +19,38 @@ namespace DataAccess.Repo.Base
             _context = context;
         }
         public virtual async Task<SuccessDataResult<TEntity>> Get(Guid ID) => await Task.FromResult(new SuccessDataResult<TEntity>() { ResponseModel = await _context.Set<TEntity>().FirstOrDefaultAsync(p => p.ID == ID), Status = true, Message = "Listeleme İşlemi Başarılı." });
-        public virtual async Task<SuccessDataResult<TEntity>> GetAll() => await Task.FromResult(new SuccessDataResult<TEntity>() { ListResponseModel = await _context.Set<TEntity>().ToListAsync(), Status = true, Message = "Listeleme İşlemi Başarılı." });
+        public virtual async Task<SuccessDataResult<TEntity>> GetAll()
+        {
+            return await Task.FromResult(new SuccessDataResult<TEntity>()
+            {
+                ListResponseModel = await _context.Set<TEntity>().ToListAsync(),
+                Status = true,
+                Message = "Listeleme İşlemi Başarılı."
+            });
+        }
 
-        public virtual async Task<SuccessDataResult<TEntity>> GetAll(Expression<Func<TEntity, bool>> predicate) => await Task.FromResult(new SuccessDataResult<TEntity>() { ListResponseModel = await _context.Set<TEntity>().Where(predicate).ToListAsync(), Status = true, Message = "Listeleme İşlemi Başarılı." });
-        public async Task<SuccessDataResult<TEntity>> GetAllInculude(params Expression<Func<TEntity, object>>[] Parametre)
+        public virtual async Task<SuccessDataResult<TEntity>> GetAll(Expression<Func<TEntity, bool>> predicate)
+        {
+            Table = _context.Set<TEntity>();
+            _Response = new();
+            IEnumerable<TEntity> Model = null;
+
+            Model = Table.Where(predicate).ToList();
+            if (Model is null)
+            {
+                _Response.Message = "Veri Bulunamadı";
+                return await Task.FromResult(_Response);
+            }
+            return await Task.FromResult(new SuccessDataResult<TEntity>()
+            {
+                ListResponseModel = Model,
+                Status = true,
+                ModelCount = Model.ToList().Count,
+                Message = $"Veriler Başarılı Şekilde Çekildi [{Model.ToList().Count}] Adet Veri Çekildi"
+            });
+        }
+
+    public async Task<SuccessDataResult<TEntity>> GetAllInculude(params Expression<Func<TEntity, object>>[] Parametre)
         {
             Table = _context.Set<TEntity>();
             IEnumerable<TEntity> Model = null;
@@ -49,7 +77,7 @@ namespace DataAccess.Repo.Base
         {
             var result = _context.Entry(entity);
             result.State = EntityState.Modified;
-            return await Task.FromResult(new SuccessDataResult<TEntity>() { ResponseModel = result.Entity, Status = true, Message = "Ekleme İşlemi Başarılı." });
+            return await Task.FromResult(new SuccessDataResult<TEntity>() { ResponseModel = result.Entity, Status = true, Message = "Güncelleme İşlemi Başarılı." });
         }
         public virtual async Task<SuccessDataResult<TEntity>> Delete(TEntity entity) => await Task.FromResult(new SuccessDataResult<TEntity>() { ResponseModel = _context.Set<TEntity>().Remove(entity).Entity, Status = true, Message = "Silme İşlemi Başarılı." });
     }
