@@ -21,11 +21,14 @@ namespace DataAccess.Repo.Base
         public virtual async Task<SuccessDataResult<TEntity>> Get(Guid ID) => await Task.FromResult(new SuccessDataResult<TEntity>() { ResponseModel = await _context.Set<TEntity>().FirstOrDefaultAsync(p => p.ID == ID), Status = true, Message = "Listeleme İşlemi Başarılı." });
         public virtual async Task<SuccessDataResult<TEntity>> GetAll()
         {
+            IEnumerable<TEntity> Model = null;
+            Model = await _context.Set<TEntity>().ToListAsync();
             return await Task.FromResult(new SuccessDataResult<TEntity>()
             {
-                ListResponseModel = await _context.Set<TEntity>().ToListAsync(),
+                ListResponseModel = Model,
                 Status = true,
-                Message = "Listeleme İşlemi Başarılı."
+                Message = "Listeleme İşlemi Başarılı.",
+                ModelCount = Model.ToList().Count
             });
         }
 
@@ -35,7 +38,7 @@ namespace DataAccess.Repo.Base
             _Response = new();
             IEnumerable<TEntity> Model = null;
 
-            Model = Table.Where(predicate).ToList();
+            Model = await Table.Where(predicate).ToListAsync();
             if (Model is null)
             {
                 _Response.Message = "Veri Bulunamadı";
@@ -46,7 +49,7 @@ namespace DataAccess.Repo.Base
                 ListResponseModel = Model,
                 Status = true,
                 ModelCount = Model.ToList().Count,
-                Message = $"Veriler Başarılı Şekilde Çekildi [{Model.ToList().Count}] Adet Veri Çekildi"
+                Message = $"Listeleme İşlemi Başarılı : [{Model.ToList().Count}] Adet Veri Çekildi"
             });
         }
 
@@ -67,7 +70,7 @@ namespace DataAccess.Repo.Base
                 ListResponseModel = Model,
                 Status = true,
                 ModelCount = Model.ToList().Count,
-                Message = $"Veriler Başarılı Şekilde Çekildi [{Model.ToList().Count}] Adet Veri Çekildi"
+                Message = $"Listeleme İşlemi Başarılı : [{Model.ToList().Count}] Adet Veri Çekildi"
             });
 
         }
