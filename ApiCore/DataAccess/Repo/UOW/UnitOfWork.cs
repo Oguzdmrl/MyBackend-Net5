@@ -18,9 +18,9 @@ namespace DataAccess.Repo.UOW
             CategoryRepository = new CategoryRepository(context);
         }
         public async Task CompleteAsync() => await _context.SaveChangesAsync();
-        public void Dispose()
+        public async void Dispose()
         {
-            _context.Dispose();
+            await _context.DisposeAsync();
             GC.SuppressFinalize(this);
         }
     }
