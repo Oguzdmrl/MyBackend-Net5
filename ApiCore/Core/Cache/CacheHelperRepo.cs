@@ -1,13 +1,11 @@
-﻿using Core.Cache;
-using Core.Cache.Enums;
+﻿using Core.Cache.Enums;
 using Core.Results;
 using Entities.Base;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebAPI.CacheHelpers.CategoryCacheHelper
+namespace Core.Cache
 {
     public static class CacheHelperRepo
     {
