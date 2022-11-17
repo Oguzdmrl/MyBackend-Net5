@@ -25,6 +25,7 @@ namespace WebAPI
 
             services.AddControllers();
             services.AddMediatR(typeof(Startup));
+            services.AddMemoryCache();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddSwaggerGen(c =>
             {
