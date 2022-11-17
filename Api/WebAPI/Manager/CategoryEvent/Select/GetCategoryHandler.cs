@@ -1,5 +1,4 @@
-﻿
-using Core.Cache;
+﻿using Core.Cache;
 using Core.Cache.Enums;
 using Core.Results;
 using DataAccess.Repo.UOW;
@@ -20,16 +19,14 @@ namespace WebAPI.Manager.CategoryEvent.Select
         public async Task<SuccessDataResult<Category>> Handle(GetCategoryQuery request, CancellationToken cancellationToken)
         {
             SuccessDataResult<Category> CategoryList = await CacheHelperRepo.GetCache<Category>(CacheEnums.GetCategory);
-           
             if (!CategoryList.Status)
             {
-               var ListModel = await _unitOfWork.CategoryRepository.GetAll();
+                var ListModel = await _unitOfWork.CategoryRepository.GetAll();
                 var Model = ListModel.ListResponseModel != null ? ListModel.ListResponseModel.ToList() : new List<Category>();
-                CacheHelperRepo.SetCache(CacheEnums.GetCategory.ToString(),Model);
+                CacheHelperRepo.SetCache(CacheEnums.GetCategory.ToString(), Model);
                 return await Task.FromResult(ListModel);
             }
             return await Task.FromResult(CategoryList);
-
         }
     }
     public partial class GetCategoryIDHandler : IRequestHandler<GetCategoryIDQuery, SuccessDataResult<Category>>

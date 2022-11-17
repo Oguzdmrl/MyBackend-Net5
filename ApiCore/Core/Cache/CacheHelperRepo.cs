@@ -11,7 +11,6 @@ namespace Core.Cache
     {
         public async static Task<SuccessDataResult<T>> GetCache<T>(CacheEnums enums) where T : BaseEntity<Guid>
         {
-
             var ModelCache = ToolsCache.SolutionsCache.GetData<T>(enums.ToString());
             if (ModelCache.Count != 0)
             {
@@ -25,16 +24,9 @@ namespace Core.Cache
             }
             else
             {
-                return await Task.FromResult(new SuccessDataResult<T>()
-                {
-                    Status = false,
-                    Message = "Cache Boş.."
-                });
+                return await Task.FromResult(new SuccessDataResult<T>(){ Status = false, Message = "Cache Boş.." });
             }
         }
-        public static void SetCache(string enums,object Model)
-        {
-            ToolsCache.SolutionsCache.SetData(enums.ToString(), Model);
-        }
+        public static void SetCache(string enums, object Model) => ToolsCache.SolutionsCache.SetData(enums.ToString(), Model);
     }
 }
