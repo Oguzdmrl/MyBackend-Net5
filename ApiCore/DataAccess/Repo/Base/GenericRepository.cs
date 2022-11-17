@@ -29,7 +29,7 @@ namespace DataAccess.Repo.Base
                 Status = true,
                 Message = "Listeleme İşlemi Başarılı.",
                 ModelCount = Model.ToList().Count
-            });
+            }); 
         }
 
         public virtual async Task<SuccessDataResult<TEntity>> GetAll(Expression<Func<TEntity, bool>> predicate)

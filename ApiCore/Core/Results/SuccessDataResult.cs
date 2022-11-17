@@ -25,5 +25,10 @@ namespace Core.Results
             this.Status = Status;
             this.Message = Message;
         }
+        public SuccessDataResult( bool Status, string Message)
+        {
+            this.Status = Status;
+            this.Message = Message;
+        }
     }
 }
