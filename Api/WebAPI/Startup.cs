@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Services.Service;
 
 namespace WebAPI
 {
@@ -26,7 +27,10 @@ namespace WebAPI
             services.AddControllers();
             services.AddMediatR(typeof(Startup));
             services.AddMemoryCache();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+            //services.AddScoped(typeof(IService<>), typeof(Service<>));
+            services.AddScoped(typeof(Service<>));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });

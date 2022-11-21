@@ -20,7 +20,6 @@ namespace WebAPI.Controllers
             _mediator = mediator;
             _uow = uow;
         }
-
         [HttpGet]
         public async Task<IActionResult> GetAll() => Ok(await _mediator.Send(new GetProductQuery()));
         //[HttpGet]

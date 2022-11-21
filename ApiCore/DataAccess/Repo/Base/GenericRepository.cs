@@ -14,11 +14,11 @@ namespace DataAccess.Repo.Base
         private SuccessDataResult<TEntity> _Response;
         private DbSet<TEntity> Table;
         protected AppDBContext _context;
-        public GenericRepository(AppDBContext context)
+        public GenericRepository(AppDBContext context) => _context = context;
+        public virtual async Task<SuccessDataResult<TEntity>> Get(Guid ID)
         {
-            _context = context;
+            return await Task.FromResult(new SuccessDataResult<TEntity>() { ResponseModel = await _context.Set<TEntity>().FirstOrDefaultAsync(p => p.ID == ID), Status = true, Message = "Listeleme İşlemi Başarılı." });
         }
-        public virtual async Task<SuccessDataResult<TEntity>> Get(Guid ID) => await Task.FromResult(new SuccessDataResult<TEntity>() { ResponseModel = await _context.Set<TEntity>().FirstOrDefaultAsync(p => p.ID == ID), Status = true, Message = "Listeleme İşlemi Başarılı." });
         public virtual async Task<SuccessDataResult<TEntity>> GetAll()
         {
             IEnumerable<TEntity> Model = null;
@@ -28,10 +28,9 @@ namespace DataAccess.Repo.Base
                 ListResponseModel = Model,
                 Status = true,
                 Message = "Listeleme İşlemi Başarılı.",
-                ModelCount = Model.ToList().Count
-            }); 
+                ModelCount = Model.ToList().Count,
+            });
         }
-
         public virtual async Task<SuccessDataResult<TEntity>> GetAll(Expression<Func<TEntity, bool>> predicate)
         {
             Table = _context.Set<TEntity>();
@@ -53,7 +52,7 @@ namespace DataAccess.Repo.Base
             });
         }
 
-    public async Task<SuccessDataResult<TEntity>> GetAllInculude(params Expression<Func<TEntity, object>>[] Parametre)
+        public async Task<SuccessDataResult<TEntity>> GetAllInculude(params Expression<Func<TEntity, object>>[] Parametre)
         {
             Table = _context.Set<TEntity>();
             IEnumerable<TEntity> Model = null;

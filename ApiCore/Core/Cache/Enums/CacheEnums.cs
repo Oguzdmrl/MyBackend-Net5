@@ -2,7 +2,7 @@
 {
     public enum CacheEnums
     {
-        GetProduct = 0,
-        GetCategory = 1
+        Product = 0,
+        Category = 1
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Core.Results;
-using DataAccess.Repo.UOW;
 using Entities;
 using MediatR;
+using Services.Service;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,11 +9,8 @@ namespace WebAPI.Manager.ProductEvent.Insert
 {
     public partial class InsertProductCommandHandler : IRequestHandler<InsertProductCommandQuery, SuccessDataResult<Product>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public InsertProductCommandHandler(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+        private readonly Service<Product> _service;
+        public InsertProductCommandHandler(Service<Product> service) => _service = service;
         public async Task<SuccessDataResult<Product>> Handle(InsertProductCommandQuery request, CancellationToken cancellationToken)
         {
             Product _Product = new()
@@ -22,7 +19,7 @@ namespace WebAPI.Manager.ProductEvent.Insert
                 Description = request.Description,
                 CategoryID = request.CategoryID
             };
-            return await Task.FromResult(await _unitOfWork.ProductRepository.Insert(_Product));
+            return await Task.FromResult(await _service.Insert(_Product));
         }
     }
 }

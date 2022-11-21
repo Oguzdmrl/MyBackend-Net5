@@ -1,12 +1,13 @@
-﻿using DataAccess.Repo.EfRepo;
+﻿using DataAccess.Repo.Base;
+using Entities.Base;
+using System;
 using System.Threading.Tasks;
 
 namespace DataAccess.Repo.UOW
 {
     public interface IUnitOfWork
     {
-        IProductRepository ProductRepository { get; }
-        ICategoryRepository CategoryRepository { get; }
+        Task<IRepository<T>> Repository<T>() where T : BaseEntity<Guid>;
         Task CompleteAsync();
         void Dispose();
     }

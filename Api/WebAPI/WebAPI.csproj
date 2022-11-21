@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\ApiCore\DataAccess\DataAccess.csproj" />
+    <ProjectReference Include="..\..\ApiCore\Services\Services.csproj" />
   </ItemGroup>
 
 </Project>

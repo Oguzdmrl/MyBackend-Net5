@@ -1,7 +1,7 @@
 ﻿using Core.Results;
-using DataAccess.Repo.UOW;
 using Entities;
 using MediatR;
+using Services.Service;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,11 +9,11 @@ namespace WebAPI.Manager.ProductEvent.Delete
 {
     public partial class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandQuery, SuccessDataResult<Product>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public DeleteProductCommandHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+        private readonly Service<Product> _service;
+        public DeleteProductCommandHandler(Service<Product> service) => _service = service;
         public async Task<SuccessDataResult<Product>> Handle(DeleteProductCommandQuery request, CancellationToken cancellationToken)
         {
-            return await Task.FromResult(await _unitOfWork.ProductRepository.Delete(new Product() { ID = request.ProductID }));
+            return await Task.FromResult(await _service.Delete(new Product() { ID = request.ProductID }));
         }
     }
 }
