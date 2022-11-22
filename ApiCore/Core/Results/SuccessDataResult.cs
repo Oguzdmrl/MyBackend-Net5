@@ -7,7 +7,7 @@ namespace Core.Results
     {
         public IEnumerable<T> ListResponseModel { get; set; } = null;
         public T ResponseModel { get; set; }
-        public bool Status { get; set; }
+        public bool Status { get; set; } = false;
         public string Message { get; set; }
         public long ModelCount { get; set; } = 0;
         public SuccessDataResult()
