@@ -13,10 +13,7 @@ namespace WebAPI.Manager.CategoryEvent.Insert
         public InsertCategoryCommandHandler(Service<Category> service) => _service = service;
         public async Task<SuccessDataResult<Category>> Handle(InsertCategoryCommandQuery request, CancellationToken cancellationToken)
         {
-            Category _Category = new()
-            {
-                Name = request.Name
-            };
+            Category _Category = new() { Name = request.Name };
             return await Task.FromResult(await _service.Insert(_Category));
         }
     }

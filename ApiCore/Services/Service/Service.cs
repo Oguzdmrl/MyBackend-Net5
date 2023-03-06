@@ -1,11 +1,7 @@
-﻿using Core.Cache;
-using Core.Cache.Enums;
-using Core.Results;
+﻿using Core.Results;
 using DataAccess.Repo.UOW;
 using Entities.Base;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -16,81 +12,12 @@ namespace Services.Service
         private readonly IUnitOfWork _uow;
         public Service(IUnitOfWork uow) => _uow = uow;
 
-        public async Task<SuccessDataResult<T>> Delete(T entity)
-        {
-            CacheEnums GetCacheEnumValue = (CacheEnums)Enum.Parse(typeof(CacheEnums), typeof(T).Name.ToString());
-            var result = await _uow.Repository<T>().Result.Delete(entity);
-            if (result.Status)
-                CacheHelperRepo.RemoveCache(GetCacheEnumValue);
-            return await Task.FromResult(result);
-        }
-        public async Task<SuccessDataResult<T>> Get(Guid ID)
-        {
-            CacheEnums GetCacheEnumValue = (CacheEnums)Enum.Parse(typeof(CacheEnums), typeof(T).Name.ToString());
-            SuccessDataResult<T> TList = await CacheHelperRepo.GetCache<T>(GetCacheEnumValue);
-            if (TList.ListResponseModel is null)
-            {
-                var ListModel = await _uow.Repository<T>().Result.Get(ID);
-                var Model = ListModel.ListResponseModel != null ? ListModel.ListResponseModel.ToList() : new List<T>();
-                CacheHelperRepo.SetCache(GetCacheEnumValue.ToString(), Model);
-                return await Task.FromResult(ListModel);
-            }
-            return await Task.FromResult(TList);
-        }
-        public async Task<SuccessDataResult<T>> GetAll()
-        {
-            CacheEnums GetCacheEnumValue = (CacheEnums)Enum.Parse(typeof(CacheEnums), typeof(T).Name.ToString());
-            SuccessDataResult<T> TList = await CacheHelperRepo.GetCache<T>(GetCacheEnumValue);
-            if (TList.ListResponseModel is null)
-            {
-                var ListModel = await _uow.Repository<T>().Result.GetAll();
-                var Model = ListModel.ListResponseModel != null ? ListModel.ListResponseModel.ToList() : new List<T>();
-                CacheHelperRepo.SetCache(GetCacheEnumValue.ToString(), Model);
-                return await Task.FromResult(ListModel);
-            }
-            return await Task.FromResult(TList);
-        }
-        public async Task<SuccessDataResult<T>> GetAll(Expression<Func<T, bool>> predicate)
-        {
-            CacheEnums GetCacheEnumValue = (CacheEnums)Enum.Parse(typeof(CacheEnums), typeof(T).Name.ToString());
-            SuccessDataResult<T> TList = await CacheHelperRepo.GetCache<T>(GetCacheEnumValue);
-            if (TList.ListResponseModel is null)
-            {
-                var ListModel = await _uow.Repository<T>().Result.GetAll(predicate);
-                var Model = ListModel.ListResponseModel != null ? ListModel.ListResponseModel.ToList() : new List<T>();
-                CacheHelperRepo.SetCache(GetCacheEnumValue.ToString(), Model);
-                return await Task.FromResult(ListModel);
-            }
-            return await Task.FromResult(TList);
-        }
-        public async Task<SuccessDataResult<T>> GetAllInculude(params Expression<Func<T, object>>[] Parametre)
-        {
-            CacheEnums GetCacheEnumValue = (CacheEnums)Enum.Parse(typeof(CacheEnums), typeof(T).Name.ToString());
-            SuccessDataResult<T> TList = await CacheHelperRepo.GetCache<T>(GetCacheEnumValue);
-            if (TList.ListResponseModel is null)
-            {
-                var ListModel = await _uow.Repository<T>().Result.GetAllInculude(Parametre);
-                var Model = ListModel.ListResponseModel != null ? ListModel.ListResponseModel.ToList() : new List<T>();
-                CacheHelperRepo.SetCache(GetCacheEnumValue.ToString(), Model);
-                return await Task.FromResult(ListModel);
-            }
-            return await Task.FromResult(TList);
-        }
-        public async Task<SuccessDataResult<T>> Insert(T entity)
-        {
-            CacheEnums GetCacheEnumValue = (CacheEnums)Enum.Parse(typeof(CacheEnums), typeof(T).Name.ToString());
-            var result = await _uow.Repository<T>().Result.Insert(entity);
-            if (result.Status)
-                CacheHelperRepo.RemoveCache(GetCacheEnumValue);
-            return await Task.FromResult(result);
-        }
-        public async Task<SuccessDataResult<T>> Update(T entity)
-        {
-            CacheEnums GetCacheEnumValue = (CacheEnums)Enum.Parse(typeof(CacheEnums), typeof(T).Name.ToString());
-            var result = await _uow.Repository<T>().Result.Update(entity);
-            if (result.Status)
-                CacheHelperRepo.RemoveCache(GetCacheEnumValue);
-            return await Task.FromResult(result);
-        }
+        public async Task<SuccessDataResult<T>> Delete(T entity) => await Task.FromResult(await _uow.CommandRepositories<T>().Result.Delete(entity));
+        public async Task<SuccessDataResult<T>> Get(Guid ID) => await Task.FromResult(await _uow.QueryableRepositories<T>().Result.Get(ID));
+        public async Task<SuccessDataResult<T>> GetAll() => await Task.FromResult(await _uow.QueryableRepositories<T>().Result.GetAll());
+        public async Task<SuccessDataResult<T>> GetAll(Expression<Func<T, bool>> parametre) => await Task.FromResult(await _uow.QueryableRepositories<T>().Result.GetAll(parametre));
+        public async Task<SuccessDataResult<T>> GetAllInculude(params Expression<Func<T, object>>[] Parametre) => await Task.FromResult(await _uow.QueryableRepositories<T>().Result.GetAllInculude(Parametre));
+        public async Task<SuccessDataResult<T>> Insert(T entity) => await Task.FromResult(await _uow.CommandRepositories<T>().Result.Insert(entity));
+        public async Task<SuccessDataResult<T>> Update(T entity) => await Task.FromResult(await _uow.CommandRepositories<T>().Result.Update(entity));
     }
 }

@@ -1,4 +1,5 @@
-﻿using DataAccess.Repo.Base;
+﻿using DataAccess.Repo.Base.CommandRepo;
+using DataAccess.Repo.Base.QueryableRepo;
 using Entities.Base;
 using System;
 using System.Collections.Generic;
@@ -11,28 +12,45 @@ namespace DataAccess.Repo.UOW
     {
         private readonly AppDBContext _context;
         private Dictionary<Type, object> _repositories;
+
+
         public Dictionary<Type, object> Repositories
         {
             get { return _repositories; }
             set { Repositories = value; }
         }
+
         public UnitOfWork(AppDBContext context)
         {
             _context = context;
             _repositories = new();
         }
-        public async Task<IRepository<T>> Repository<T>() where T : BaseEntity<Guid>
+
+        public async Task<IQueryableRepository<T>> QueryableRepositories<T>() where T : BaseEntity<Guid>
         {
             if (_repositories is null) { _repositories = new(); }
-            if (Repositories.Keys.Contains(typeof(T)))
+            if (!Repositories.Keys.Contains(typeof(T)))
             {
-                return await Task.FromResult(Repositories[typeof(T)] as IRepository<T>);
+                Repositories.Add(typeof(T), new QueryableRepository<T>(_context));
+                return await Task.FromResult((IQueryableRepository<T>)new QueryableRepository<T>(_context));
             }
-            IRepository<T> repo = new GenericRepository<T>(_context);
-            Repositories.Add(typeof(T), repo);
-            return await Task.FromResult(repo);
+            return await Task.FromResult(Repositories[typeof(T)] as IQueryableRepository<T>);
         }
-        public async Task CompleteAsync() => await _context.SaveChangesAsync();
+
+        public async Task<ICommandRepository<T>> CommandRepositories<T>() where T : BaseEntity<Guid>
+        {
+            if (_repositories is null) { _repositories = new(); }
+            if (!Repositories.Keys.Contains(typeof(T)))
+            {
+                ICommandRepository<T> repo = new CommandRepository<T>(_context);
+                Repositories.Add(typeof(T), repo);
+                return await Task.FromResult(repo);
+            }
+            return await Task.FromResult(Repositories[typeof(T)] as ICommandRepository<T>);
+        }
+
+        public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+
         public async void Dispose()
         {
             await _context.DisposeAsync();

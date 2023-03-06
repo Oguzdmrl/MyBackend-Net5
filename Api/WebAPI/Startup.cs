@@ -14,10 +14,7 @@ namespace WebAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
@@ -27,10 +24,14 @@ namespace WebAPI
             services.AddControllers();
             services.AddMediatR(typeof(Startup));
             services.AddMemoryCache();
-            //services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+           
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
-            //services.AddScoped(typeof(IService<>), typeof(Service<>));
+
+            services.AddScoped(typeof(IService<>), typeof(Service<>)); // Düzenlenicek
             services.AddScoped(typeof(Service<>));
+
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
@@ -53,6 +54,7 @@ namespace WebAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
             }
+
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseHttpsRedirection();

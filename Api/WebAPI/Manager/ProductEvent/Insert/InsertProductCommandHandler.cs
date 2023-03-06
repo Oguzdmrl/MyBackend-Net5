@@ -9,8 +9,8 @@ namespace WebAPI.Manager.ProductEvent.Insert
 {
     public partial class InsertProductCommandHandler : IRequestHandler<InsertProductCommandQuery, SuccessDataResult<Product>>
     {
-        private readonly Service<Product> _service;
-        public InsertProductCommandHandler(Service<Product> service) => _service = service;
+        private readonly IService<Product> _service;
+        public InsertProductCommandHandler(IService<Product> service) => _service = service;
         public async Task<SuccessDataResult<Product>> Handle(InsertProductCommandQuery request, CancellationToken cancellationToken)
         {
             Product _Product = new()
